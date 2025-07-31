@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Reser.Properties;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Reser
@@ -20,7 +22,14 @@ namespace Reser
             saveFileDialog1.Filter = "CSV файлы (*.csv)|*.csv";
             saveFileDialog1.DefaultExt = "csv";
             saveFileDialog1.AddExtension = true;
+
+            this.FormClosing += (sender, e) => { TryDeleteFile(tempFilePath); };
         }
+
+        // Генерация уникального имени файла
+        string tempFilePath = Path.Combine(Path.GetTempPath(),
+                Guid.NewGuid().ToString() + ".pdf");
+
 
         double[,] Table = new double[32768, 8];
         int count = 0;
@@ -569,16 +578,75 @@ namespace Reser
 
         private void HelpButton_Click(object sender, EventArgs e)
         {
-            string fileName = @"Reser_help.pdf";
-            if (File.Exists(fileName))
+            //string fileName = @"Reser_help.pdf";
+            //if (File.Exists(fileName))
+            //{
+            //    Help.ShowHelp(this, fileName, HelpNavigator.TableOfContents);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Отсутствует файл справки", "Внимание!",
+            //        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+            //}
+
+            //string resourceName = "Reser.Reser_help.pdf"; // Замените "YourNamespace" на пространство имен вашего проекта
+            //string tempFilePath = Path.Combine(Path.GetTempPath(), "Reser_help.pdf");
+
+            //// Получение текущей сборки
+            //Assembly assembly = Assembly.GetExecutingAssembly();
+
+            //// Извлечение ресурса в виде потока
+            //using (Stream resourceStream = assembly.GetManifestResourceStream(resourceName))
+            //{
+            //    if (resourceStream != null)
+            //    {
+            //        // Запись потока в файл на диске
+            //        using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create))
+            //        {
+            //            resourceStream.CopyTo(fileStream);
+            //        }
+
+            //        // Открытие файла с использованием ассоциированной программы по умолчанию
+            //        Process.Start(tempFilePath);
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show($"Ресурс '{resourceName}' не найден.", "Внимание!",
+            //        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+            //    }
+            //}
+
+            byte[] fileData = Properties.Resources.Reser_help;
+            
+            
+            try
             {
-                Help.ShowHelp(this, fileName, HelpNavigator.TableOfContents);
+                // Сохранение ресурса во временный файл
+                File.WriteAllBytes(tempFilePath, fileData);
+
+                // Запуск приложения по умолчанию
+                ProcessStartInfo startInfo = new ProcessStartInfo()
+                {
+                    FileName = tempFilePath,
+                    UseShellExecute = true // Ключевой параметр для использования ассоциаций ОС
+                };
+                Process.Start(startInfo);
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Отсутствует файл справки", "Внимание!",
-                    MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка: {ex.Message}");
+                // Удаление файла в случае ошибки
+                TryDeleteFile(tempFilePath);
             }
+        }
+        private static void TryDeleteFile(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
+            catch { /* Игнорируем ошибки удаления */ }
         }
     }
 }

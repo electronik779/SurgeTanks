@@ -43,6 +43,10 @@ namespace Reser
 
             label22.Visible = false;
             label23.Visible = false;
+            label27.Visible = false;
+            label28.Visible = false;
+            label29.Visible = false;
+            label30.Visible = false;
 
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();

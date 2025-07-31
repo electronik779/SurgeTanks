@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -21,7 +22,13 @@ namespace ReserK
             saveFileDialog1.Filter = "CSV файлы (*.csv)|*.csv";
             saveFileDialog1.DefaultExt = "csv";
             saveFileDialog1.AddExtension = true;
+
+            this.FormClosing += (sender, e) => { TryDeleteFile(tempFilePath); };
         }
+
+        // Генерация уникального имени файла
+        string tempFilePath = Path.Combine(Path.GetTempPath(),
+                Guid.NewGuid().ToString() + ".pdf");
 
         private void ExecuteButton1_Click(object sender, EventArgs e)
         {
@@ -545,16 +552,36 @@ namespace ReserK
 
         private void HelpButton_Click(object sender, EventArgs e)
         {
-            string fileName = @"ReserK_help.pdf";
-            if (File.Exists(fileName))
+            byte[] fileData = Properties.Resources.ReserK_help;
+
+            try
             {
-                Help.ShowHelp(this, fileName, HelpNavigator.TableOfContents);
+                // Сохранение ресурса во временный файл
+                File.WriteAllBytes(tempFilePath, fileData);
+
+                // Запуск приложения по умолчанию
+                ProcessStartInfo startInfo = new ProcessStartInfo()
+                {
+                    FileName = tempFilePath,
+                    UseShellExecute = true // Ключевой параметр для использования ассоциаций ОС
+                };
+                Process.Start(startInfo);
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Отсутствует файл справки", "Внимание!",
-                    MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка: {ex.Message}");
+                // Удаление файла в случае ошибки
+                TryDeleteFile(tempFilePath);
             }
+        }
+        private static void TryDeleteFile(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
+            catch { /* Игнорируем ошибки удаления */ }
         }
 
     }

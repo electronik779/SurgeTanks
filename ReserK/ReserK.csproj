@@ -63,7 +63,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>iconK.ico</ApplicationIcon>
@@ -284,6 +284,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReserK_TemporaryKey.pfx" />
+    <EmbeddedResource Include="Resources\ReserK_help.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Resources\ShemeK.png" />
   </ItemGroup>
   <ItemGroup>

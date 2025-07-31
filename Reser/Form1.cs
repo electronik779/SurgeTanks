@@ -578,47 +578,8 @@ namespace Reser
 
         private void HelpButton_Click(object sender, EventArgs e)
         {
-            //string fileName = @"Reser_help.pdf";
-            //if (File.Exists(fileName))
-            //{
-            //    Help.ShowHelp(this, fileName, HelpNavigator.TableOfContents);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Отсутствует файл справки", "Внимание!",
-            //        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
-            //}
-
-            //string resourceName = "Reser.Reser_help.pdf"; // Замените "YourNamespace" на пространство имен вашего проекта
-            //string tempFilePath = Path.Combine(Path.GetTempPath(), "Reser_help.pdf");
-
-            //// Получение текущей сборки
-            //Assembly assembly = Assembly.GetExecutingAssembly();
-
-            //// Извлечение ресурса в виде потока
-            //using (Stream resourceStream = assembly.GetManifestResourceStream(resourceName))
-            //{
-            //    if (resourceStream != null)
-            //    {
-            //        // Запись потока в файл на диске
-            //        using (FileStream fileStream = new FileStream(tempFilePath, FileMode.Create))
-            //        {
-            //            resourceStream.CopyTo(fileStream);
-            //        }
-
-            //        // Открытие файла с использованием ассоциированной программы по умолчанию
-            //        Process.Start(tempFilePath);
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show($"Ресурс '{resourceName}' не найден.", "Внимание!",
-            //        MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
-            //    }
-            //}
-
-            byte[] fileData = Properties.Resources.Reser_help;
-            
-            
+           byte[] fileData = Properties.Resources.Reser_help;
+                       
             try
             {
                 // Сохранение ресурса во временный файл

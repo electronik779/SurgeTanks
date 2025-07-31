@@ -50,8 +50,16 @@ namespace Reser
             if (this.kr.Text == "") { this.kr.BackColor = Color.Red; err = true; }
             if (this.T1.Text == "") { this.T1.BackColor = Color.Red; err = true; }
             if (this.TT2.Text == "") { this.TT2.BackColor = Color.Red; err = true; }
+            if (this.T3.Text == "") { this.T3.BackColor = Color.Red; err = true; }
+            if (this.T4.Text == "") { this.T4.BackColor = Color.Red; err = true; }
+            if (this.T5.Text == "") { this.T5.BackColor = Color.Red; err = true; }
+            if (this.T6.Text == "") { this.T6.BackColor = Color.Red; err = true; }
             if (this.Q1.Text == "") { this.Q1.BackColor = Color.Red; err = true; }
             if (this.Q2.Text == "") { this.Q2.BackColor = Color.Red; err = true; }
+            if (this.Q3.Text == "") { this.Q3.BackColor = Color.Red; err = true; }
+            if (this.Q4.Text == "") { this.Q4.BackColor = Color.Red; err = true; }
+            if (this.Q5.Text == "") { this.Q5.BackColor = Color.Red; err = true; }
+            if (this.Q6.Text == "") { this.Q6.BackColor = Color.Red; err = true; }
             if (this.dt.Text == "") { this.dt.BackColor = Color.Red; err = true; }
             if (this.Tras.Text == "") { this.Tras.BackColor = Color.Red; err = true; }
             if (err)
@@ -61,8 +69,8 @@ namespace Reser
                 return;
             }
 
-            this.T3.Text = this.Tras.Text;
-            this.Q3.Text = this.Q2.Text;
+            //if (GetDouble(this.T6.Text, 0d) < GetDouble(this.Tras.Text, 0d))
+            //{ this.T6.Text = this.Tras.Text; }
 
             double Ld = GetDouble(this.Ld.Text, 0d);
             double Fd = GetDouble(this.Fd.Text, 0d);
@@ -72,9 +80,15 @@ namespace Reser
             double t1 = GetDouble(this.T1.Text, 0d);
                    t2 = GetDouble(this.TT2.Text, 0d);
             double t3 = GetDouble(this.T3.Text, 0d);
+            double t4 = GetDouble(this.T4.Text, 0d);
+            double t5 = GetDouble(this.T5.Text, 0d);
+            double t6 = GetDouble(this.T6.Text, 0d);
             double Q1 = GetDouble(this.Q1.Text, 0d);
             double Q2 = GetDouble(this.Q2.Text, 0d);
             double Q3 = GetDouble(this.Q3.Text, 0d);
+            double Q4 = GetDouble(this.Q4.Text, 0d);
+            double Q5 = GetDouble(this.Q5.Text, 0d);
+            double Q6 = GetDouble(this.Q6.Text, 0d);
             double dt = GetDouble(this.dt.Text, 0d);
             double Tras = GetDouble(this.Tras.Text, 0d);
 
@@ -106,13 +120,9 @@ namespace Reser
 
             double Qst;
 
-            int IK = 3;
-
-
-            double[] UT = new double[3] { t1, t2, t3 };
-            double[] UQST = new double[3] { Q1, Q2, Q3 };
-
-
+            int IK = 6;
+            double[] UT = new double[6] { t1, t2, t3, t4, t5, t6 };
+            double[] UQST = new double[6] { Q1, Q2, Q3, Q4, Q5, Q6 };
 
             double Qd;
             double Qr;
@@ -186,20 +196,23 @@ namespace Reser
                     MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
             }
 
-            double First = 0;
-            double Second = 0;
-            // Определяем минимальный уровень
+            double First = Table[0, 6];
+            double Second = Table[0, 6];
+            // Определяем минимальный и максимальный уровень
             for (int i = 0; i < count; i++)
             {
                 if (Table[i, 6] < First) First = Table[i, 6];
+                if (Table[i, 6] > Second) Second = Table[i, 6];
             }
-            label22.Text = "Минимальный уровень: " + Math.Round(First, 2) + " м";
+            label30.Text = "Максимальный уровень: " + Math.Round(Second, 2) + " м";
+            label29.Text = "Минимальный уровень: " + Math.Round(First, 2) + " м";
 
             // Определяем максимумы
             if (Q1 > Q2)
             {
                 double[] DYDX = new double[count];
                 First = 0;
+                Second = 0;
                 int SecondPosition = 0;
 
                 double Min = Table[0, 7];
@@ -255,16 +268,20 @@ namespace Reser
                         break;
                     }
                 }
-
                 label22.Text = "Первый максимум: " + Math.Round(First, 2) + " м";
-
                 label23.Text = "Второй максимум: " + Math.Round(Second, 2) + " м";
+
+                label27.Visible = true;
+                label22.BackColor = SystemColors.Info;
+                label22.Visible = true;
                 label23.BackColor = SystemColors.Info;
                 label23.Visible = true;
             }
-
-            label22.BackColor = SystemColors.Info;
-            label22.Visible = true;
+            label28.Visible = true;
+            label30.BackColor = SystemColors.Info;
+            label30.Visible = true;
+            label29.BackColor = SystemColors.Info;
+            label29.Visible = true;
         }
 
         private double Int11(double D, int N, double[] X, double[] Y)
@@ -315,6 +332,22 @@ namespace Reser
         {
             TT2.BackColor = SystemColors.Window;
         }
+        private void T3_Enter(object sender, EventArgs e)
+        {
+            T3.BackColor = SystemColors.Window;
+        }
+        private void T4_Enter(object sender, EventArgs e)
+        {
+            T4.BackColor = SystemColors.Window;
+        }
+        private void T5_Enter(object sender, EventArgs e)
+        {
+            T5.BackColor = SystemColors.Window;
+        }
+        private void T6_Enter(object sender, EventArgs e)
+        {
+            T6.BackColor = SystemColors.Window;
+        }
         private void Q1_Enter(object sender, EventArgs e)
         {
             Q1.BackColor = SystemColors.Window;
@@ -322,6 +355,22 @@ namespace Reser
         private void Q2_Enter(object sender, EventArgs e)
         {
             Q2.BackColor = SystemColors.Window;
+        }
+        private void Q3_Enter(object sender, EventArgs e)
+        {
+            Q3.BackColor = SystemColors.Window;
+        }
+        private void Q4_Enter(object sender, EventArgs e)
+        {
+            Q4.BackColor = SystemColors.Window;
+        }
+        private void Q5_Enter(object sender, EventArgs e)
+        {
+            Q5.BackColor = SystemColors.Window;
+        }
+        private void Q6_Enter(object sender, EventArgs e)
+        {
+            Q6.BackColor = SystemColors.Window;
         }
         private void dt_Enter(object sender, EventArgs e)
         {
@@ -342,8 +391,16 @@ namespace Reser
             if (this.kr.Text == "") { this.kr.BackColor = Color.Red; err = true; }
             if (this.T1.Text == "") { this.T1.BackColor = Color.Red; err = true; }
             if (this.TT2.Text == "") { this.TT2.BackColor = Color.Red; err = true; }
+            if (this.T3.Text == "") { this.T3.BackColor = Color.Red; err = true; }
+            if (this.T4.Text == "") { this.T4.BackColor = Color.Red; err = true; }
+            if (this.T5.Text == "") { this.T5.BackColor = Color.Red; err = true; }
+            if (this.T6.Text == "") { this.T6.BackColor = Color.Red; err = true; }
             if (this.Q1.Text == "") { this.Q1.BackColor = Color.Red; err = true; }
             if (this.Q2.Text == "") { this.Q2.BackColor = Color.Red; err = true; }
+            if (this.Q3.Text == "") { this.Q3.BackColor = Color.Red; err = true; }
+            if (this.Q4.Text == "") { this.Q4.BackColor = Color.Red; err = true; }
+            if (this.Q5.Text == "") { this.Q5.BackColor = Color.Red; err = true; }
+            if (this.Q6.Text == "") { this.Q6.BackColor = Color.Red; err = true; }
             if (this.dt.Text == "") { this.dt.BackColor = Color.Red; err = true; }
             if (this.Tras.Text == "") { this.Tras.BackColor = Color.Red; err = true; }
             if (err)
@@ -377,9 +434,15 @@ namespace Reser
                 block3.Add(T1.Text);
                 block3.Add(TT2.Text);
                 block3.Add(T3.Text);
+                block3.Add(T4.Text);
+                block3.Add(T5.Text);
+                block3.Add(T6.Text);
                 block3.Add(Q1.Text);
                 block3.Add(Q2.Text);
                 block3.Add(Q3.Text);
+                block3.Add(Q4.Text);
+                block3.Add(Q5.Text);
+                block3.Add(Q6.Text);
                 block4.Add(dt.Text);
                 block4.Add(Tras.Text);
 
@@ -428,22 +491,25 @@ namespace Reser
                     T1.Text = block3?.ElementAtOrDefault(0) ?? string.Empty;
                     TT2.Text = block3?.ElementAtOrDefault(1) ?? string.Empty;
                     T3.Text = block3?.ElementAtOrDefault(2) ?? string.Empty;
-                    Q1.Text = block3?.ElementAtOrDefault(3) ?? string.Empty;
-                    Q2.Text = block3?.ElementAtOrDefault(4) ?? string.Empty;
-                    Q3.Text = block3?.ElementAtOrDefault(5) ?? string.Empty;
+                    T4.Text = block3?.ElementAtOrDefault(3) ?? string.Empty;
+                    T5.Text = block3?.ElementAtOrDefault(4) ?? string.Empty;
+                    T6.Text = block3?.ElementAtOrDefault(5) ?? string.Empty;
+                    Q1.Text = block3?.ElementAtOrDefault(6) ?? string.Empty;
+                    Q2.Text = block3?.ElementAtOrDefault(7) ?? string.Empty;
+                    Q3.Text = block3?.ElementAtOrDefault(8) ?? string.Empty;
+                    Q4.Text = block3?.ElementAtOrDefault(9) ?? string.Empty;
+                    Q5.Text = block3?.ElementAtOrDefault(10) ?? string.Empty;
+                    Q6.Text = block3?.ElementAtOrDefault(11) ?? string.Empty;
                     dt.Text = block4?.ElementAtOrDefault(0) ?? string.Empty;
                     Tras.Text = block4?.ElementAtOrDefault(1) ?? string.Empty;
                 }
                 catch (Exception ex)
                 {
-
-
                     MessageBox.Show("Неверный формат файла исходных данных " +
                         "/ файл исходных данных повреждён \n\n" + ex, "Внимание!",
                     MessageBoxButtons.OK, icon: MessageBoxIcon.Error);
                 }
             }
-
         }
 
         private void SaveResultButton_Click(object sender, EventArgs e)
